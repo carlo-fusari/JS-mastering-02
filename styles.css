@@ -11,6 +11,13 @@
     width: 90%;
     height: 90%;
     background-color: black;
+    display: flex;
+    flex-direction: column;
+}
+
+p {
+    z-index: 99;
+    color: rgba(150,255,150,1);
 }
 
 #three-canvas {

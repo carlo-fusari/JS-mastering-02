@@ -1,5 +1,7 @@
 import * as THREE from './node_modules/three/build/three.module.js';
 
+const statsElement = document.getElementById('stats');
+
 // Scene
 const scene = new THREE.Scene();
 const canvas = document.getElementById('three-canvas');
@@ -337,6 +339,7 @@ function GenerateMaze() {
 
     isResetted = false;
     isGenerated = true;
+    statsElement.textContent = '';
 }
 function AreCellsAvailable() {
     let successufull = false;
@@ -445,27 +448,29 @@ function animate(currentTime) {
         if(distZ < limDeltaCameraNearZ) camera.position.z++;
         else if(distZ > limDeltaCameraFarZ) camera.position.z--;
 
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-
-        //every tot seconds
-        const elapsedTime = currentTime - lastExecutionTime;
-        if (elapsedTime >= interval) {
-            
-            timeBezier += 0.1 * invert;
-            if(timeBezier > 1.0 || timeBezier < 0.0) {
-                invert = -invert;
-                timeBezier += 0.1 * invert;
-            }
-            MoveTarget();
-
-            lastExecutionTime = currentTime;
-        }
+        statsElement.textContent = moveCounter + ' moves';
 
         if(isCompleted) {
+            statsElement.textContent = 'maze completed in ' + moveCounter + ' moves';
             stopMaze = true;
-            console.log('maze completed in ' + moveCounter + ' moves');
         }
+    }
+
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+
+    //every tot seconds
+    const elapsedTime = currentTime - lastExecutionTime;
+    if (elapsedTime >= interval) {
+        
+        timeBezier += 0.1 * invert;
+        if(timeBezier > 1.0 || timeBezier < 0.0) {
+            invert = -invert;
+            timeBezier += 0.1 * invert;
+        }
+        MoveTarget();
+
+        lastExecutionTime = currentTime;
     }
 }
 animate();
